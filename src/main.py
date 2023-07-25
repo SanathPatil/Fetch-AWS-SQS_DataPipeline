@@ -56,6 +56,8 @@ class SqsMessages:
         Extracts data from SQS query url, converts raw data into key value pairs using xmltodict python library.
         Regular expressions are used to extract column names and values and are further stored in dictionary: this
         dictionary is passed around the methods for further processing until inserting into the database.
+        Note: wanted to use Boto3 to automate reading all the SQS messages in the queue. However, due to issue explained
+        in the Readme(Question 5) had to use other approaches to read the data.
         :return: Dictionary(Dict) with column value and name as key-value pairs
         """
         try:
@@ -76,10 +78,10 @@ class SqsMessages:
 
             Dict = self.mask_dataTypes(Dict, ['ip', 'device_id'])
             Dict = self.format_dataTypes(Dict)
-
+            return Dict
         except Exception as e:
             logger.error(f"Failed to extract_message_values due to :{e}")
-        return Dict
+
 
 class Database():
     """
@@ -140,7 +142,6 @@ def main():
 
     except Exception as e:
         logger.error(f"Failed to process! due to {e}")
-        raise
     finally:
         logger.info("Closing Connection")
         if database.get_connection():
