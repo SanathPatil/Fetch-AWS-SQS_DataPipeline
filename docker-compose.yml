@@ -8,4 +8,8 @@ services:
     image: fetchdocker/data-takehome-postgres
     ports:
       - 5432:5432
-#command: python ./main.py
+#  app:
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+#    command: python ./src/main.py
